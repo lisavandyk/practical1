@@ -13,35 +13,24 @@ import time as time
 switch_list = [11,13]							#Array of pins connected to the switches
 LED_list = [3,5,7]							#Array of pins connected to LEDS
 counter=0								#Variable that keeps track of what number is to be displayed
-direction=1								#Variable that keeps track of direction of counting
 
 def main():
 	global direction
 	global counter
 
 	LED(counter)
-	time.sleep(1)
+	time.sleep(0.2)
 	if GPIO.event_detected(11):					#When Switch 1 is pressed - count forwards
-		direction =1
+		if (counter == 7):
+			counter=0
+		else:
+			counter+=1
 
 	if GPIO.event_detected(13):					#When Switch 2 is pressed - count backwards
-		direction = 0
-
-	count(direction)
-
-def count(c):								#Function that increments/decrements counter
-	global counter
-	if (c==1):
-		if (counter == 7):
-			counter=0					#Counter loops back  from 7 to zero
-		else:
-			counter+=1					#Counter increments
-
-	if (c==0):
-		if (counter == 0):
-			counter=7					#Counter loops from 7  to zero
-		else:
-			counter-=1					#Counter decrements
+		if (counter==0):
+			counter=7
+		else :
+			counter-=1
 
 def LED(c):								#Function that will realize binary number on LED's
 	if (c==0):
@@ -97,3 +86,4 @@ if __name__ == "__main__":
 		print("Some other error occurred")
 		print(e.message)
 
+GPIO.cleanup()
